@@ -12,11 +12,12 @@ services:
       DATABASE_USER: ${DATABASE_USER:-shopware}
       DATABASE_PASSWORD: ${DATABASE_PASSWORD:-shopware}
       DATABASE_NAME: ${DATABASE_NAME:-shopware}
-      ADMIN_EMAIL: ${ADMIN_EMAIL:-admin@example.com}
+      ADMIN_EMAIL: ${ADMIN_EMAIL:-example@example.com}
       ADMIN_USERNAME: ${ADMIN_USERNAME:-admin}
       ADMIN_PASSWORD: ${ADMIN_PASSWORD:-shopware}
       ADMIN_FIRSTNAME: ${ADMIN_FIRSTNAME:-Demo}
       ADMIN_LASTNAME: ${ADMIN_LASTNAME:-Admin}
+      SHOP_EMAIL: ${SHOP_EMAIL:-example@example.com}
       SHOP_LOCALE: ${SHOP_LOCALE:-en-GB}
       SHOP_CURRENCY: ${SHOP_CURRENCY:-EUR}
       SHOP_NAME: ${SHOP_NAME:-Demo Store}

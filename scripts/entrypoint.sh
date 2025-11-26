@@ -29,11 +29,21 @@ done
 
 cd "$SHOPWARE_DIR"
 
+# Persist environment so the runtime uses the container DB host/port
+APP_URL_VALUE="${APP_URL:-http://localhost:8500}"
+DATABASE_URL_VALUE="mysql://${DATABASE_USER:-shopware}:${DATABASE_PASSWORD:-shopware}@${HOST}:${PORT}/${DATABASE_NAME:-shopware}"
+cat > .env.local <<EOF
+APP_ENV=${APP_ENV:-prod}
+APP_DEBUG=${APP_DEBUG:-0}
+APP_URL=${APP_URL_VALUE}
+DATABASE_URL=${DATABASE_URL_VALUE}
+EOF
+
 # If not installed, run installer with demo data
 if [ ! -f "$INSTALL_MARKER" ]; then
   echo "[entrypoint] Running Shopware installer..."
-  export APP_URL="${APP_URL:-http://localhost:8500}"
-  export DATABASE_URL="mysql://${DATABASE_USER:-shopware}:${DATABASE_PASSWORD:-shopware}@${HOST}:${PORT}/${DATABASE_NAME:-shopware}"
+  export APP_URL="$APP_URL_VALUE"
+  export DATABASE_URL="$DATABASE_URL_VALUE"
   bin/console system:install \
     --create-database \
     --force \

@@ -51,7 +51,7 @@ This repository provides a lightweight infrastructure to spin up a default Shopw
 - `Dockerfile` — PHP + Apache image with Composer
 - `docker-compose.yml` — services for Shopware app and MySQL
 - `scripts/entrypoint.sh` — installs Shopware on first boot and keeps Apache running
-- `shopware/` — bind-mounted project directory populated at runtime (kept out of version control)
+- `shopware/` — bind-mounted project directory populated at runtime (source files committed; build outputs like `vendor/`, `var/`, and `public/media` are git-ignored)
 
 ## First-boot install details
 
@@ -72,7 +72,7 @@ Subsequent container restarts reuse the existing installation and database data.
   ```
 
 - Reinstall the shop (destroys data):
-  ```bash
+ ```bash
   docker compose down -v
   rm -rf shopware/* shopware/.[!.]* shopware/..?*
   docker compose up --build
@@ -81,3 +81,4 @@ Subsequent container restarts reuse the existing installation and database data.
 ## Notes
 - The install includes Shopware demo data so you get default store items out of the box.
 - The `APP_URL` in `.env` defaults to `http://localhost:8500`; change it if you bind to another host/port.
+- The entrypoint writes `.env.local` inside `shopware/` so runtime services use the container MySQL host/port instead of `localhost`.
