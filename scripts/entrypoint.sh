@@ -30,6 +30,7 @@ cd "$SHOPWARE_DIR"
 if [ ! -f "$INSTALL_MARKER" ]; then
   echo "[entrypoint] Running Shopware installer..."
   export APP_URL="${APP_URL:-http://localhost:8500}"
+  export DATABASE_URL="mysql://${DATABASE_USER:-shopware}:${DATABASE_PASSWORD:-shopware}@${HOST}:${PORT}/${DATABASE_NAME:-shopware}"
   bin/console system:install \
     --create-database \
     --force \
