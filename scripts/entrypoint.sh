@@ -4,6 +4,9 @@ set -euo pipefail
 SHOPWARE_DIR="/var/www/html"
 INSTALL_MARKER="$SHOPWARE_DIR/.installed"
 
+# Raise PHP memory limit (configurable via PHP_MEMORY_LIMIT env)
+echo "memory_limit=${PHP_MEMORY_LIMIT:-512M}" > /usr/local/etc/php/conf.d/memory-limit.ini
+
 if [ ! -f "$SHOPWARE_DIR/public/index.php" ]; then
   echo "[entrypoint] Installing Shopware source..."
   shopt -s dotglob

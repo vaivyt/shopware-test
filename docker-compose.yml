@@ -20,6 +20,7 @@ services:
       SHOP_LOCALE: ${SHOP_LOCALE:-en-GB}
       SHOP_CURRENCY: ${SHOP_CURRENCY:-EUR}
       SHOP_NAME: ${SHOP_NAME:-Demo Store}
+      PHP_MEMORY_LIMIT: ${PHP_MEMORY_LIMIT:-512M}
     volumes:
       - ./shopware:/var/www/html
     depends_on:

@@ -20,6 +20,7 @@ This repository provides a lightweight infrastructure to spin up a default Shopw
 
    - `APP_URL` — public URL of the store (defaults to `http://localhost:8500`).
    - `SHOP_NAME`, `SHOP_EMAIL`, `SHOP_LOCALE`, `SHOP_CURRENCY` — basic shop metadata.
+   - `PHP_MEMORY_LIMIT` — PHP memory limit for CLI/web requests (defaults to `512M`; increase if installation exhausts memory).
    - `ADMIN_USERNAME`, `ADMIN_PASSWORD`, `ADMIN_EMAIL` — admin account created after installation.
 
 2. Start the stack in the background (builds the PHP image, installs Shopware on first run, and loads demo data):
