@@ -1,0 +1,7 @@
+/vendor
+/.env
+/.idea
+/node_modules
+/docker-cache
+/shopware/*
+!/shopware/.gitkeep
