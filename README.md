@@ -81,4 +81,4 @@ Subsequent container restarts reuse the existing installation and database data.
 ## Notes
 - The install includes Shopware demo data so you get default store items out of the box.
 - The `APP_URL` in `.env` defaults to `http://localhost:8500`; change it if you bind to another host/port.
-- The entrypoint writes `.env.local` inside `shopware/` so runtime services use the container MySQL host/port instead of `localhost`.
+- The entrypoint writes `.env.local` (and rewrites `.env`) inside `shopware/` so runtime services and CLI commands use the container MySQL host/port instead of `localhost`.

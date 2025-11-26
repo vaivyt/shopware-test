@@ -32,12 +32,29 @@ cd "$SHOPWARE_DIR"
 # Persist environment so the runtime uses the container DB host/port
 APP_URL_VALUE="${APP_URL:-http://localhost:8500}"
 DATABASE_URL_VALUE="mysql://${DATABASE_USER:-shopware}:${DATABASE_PASSWORD:-shopware}@${HOST}:${PORT}/${DATABASE_NAME:-shopware}"
+
+# Write both .env.local (takes precedence) and .env to keep the runtime and CLI
+# aligned with the containerised database host instead of defaulting to localhost.
 cat > .env.local <<EOF
 APP_ENV=${APP_ENV:-prod}
 APP_DEBUG=${APP_DEBUG:-0}
 APP_URL=${APP_URL_VALUE}
 DATABASE_URL=${DATABASE_URL_VALUE}
 EOF
+
+if [ -f .env ]; then
+  sed -i \
+    -e "s#^APP_URL=.*#APP_URL=${APP_URL_VALUE}#" \
+    -e "s#^DATABASE_URL=.*#DATABASE_URL=${DATABASE_URL_VALUE}#" \
+    .env
+else
+  cat > .env <<EOF
+APP_ENV=${APP_ENV:-prod}
+APP_DEBUG=${APP_DEBUG:-0}
+APP_URL=${APP_URL_VALUE}
+DATABASE_URL=${DATABASE_URL_VALUE}
+EOF
+fi
 
 # If not installed, run installer with demo data
 if [ ! -f "$INSTALL_MARKER" ]; then
