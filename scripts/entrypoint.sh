@@ -29,39 +29,42 @@ done
 
 cd "$SHOPWARE_DIR"
 
-# Persist environment so the runtime uses the container DB host/port
 APP_URL_VALUE="${APP_URL:-http://localhost:8500}"
 DATABASE_URL_VALUE="mysql://${DATABASE_USER:-shopware}:${DATABASE_PASSWORD:-shopware}@${HOST}:${PORT}/${DATABASE_NAME:-shopware}"
 
-# Export for the current process so console commands and Apache share the same values
-export APP_URL="$APP_URL_VALUE"
-export DATABASE_URL="$DATABASE_URL_VALUE"
+apply_env() {
+  # Export for the current process so console commands and Apache share the same values
+  export APP_URL="$APP_URL_VALUE"
+  export DATABASE_URL="$DATABASE_URL_VALUE"
 
-# Write both .env.local (takes precedence) and .env to keep the runtime and CLI
-# aligned with the containerised database host instead of defaulting to localhost.
-cat > .env.local <<EOF
+  # Write both .env.local (takes precedence) and .env to keep the runtime and CLI
+  # aligned with the containerised database host instead of defaulting to localhost.
+  cat > .env.local <<EOF
 APP_ENV=${APP_ENV:-prod}
 APP_DEBUG=${APP_DEBUG:-0}
 APP_URL=${APP_URL_VALUE}
 DATABASE_URL=${DATABASE_URL_VALUE}
 EOF
 
-if [ -f .env ]; then
-  sed -i \
-    -e "s#^APP_URL=.*#APP_URL=${APP_URL_VALUE}#" \
-    -e "s#^DATABASE_URL=.*#DATABASE_URL=${DATABASE_URL_VALUE}#" \
-    .env
-else
-  cat > .env <<EOF
+  if [ -f .env ]; then
+    sed -i \
+      -e "s#^APP_URL=.*#APP_URL=${APP_URL_VALUE}#" \
+      -e "s#^DATABASE_URL=.*#DATABASE_URL=${DATABASE_URL_VALUE}#" \
+      .env
+  else
+    cat > .env <<EOF
 APP_ENV=${APP_ENV:-prod}
 APP_DEBUG=${APP_DEBUG:-0}
 APP_URL=${APP_URL_VALUE}
 DATABASE_URL=${DATABASE_URL_VALUE}
 EOF
-fi
+  fi
 
-# Drop any cached env dump so the runtime picks up the updated connection settings
-rm -f .env.local.php
+  # Drop any cached env dump so the runtime picks up the updated connection settings
+  rm -f .env.local.php
+}
+
+apply_env
 
 # If not installed, run installer with demo data
 if [ ! -f "$INSTALL_MARKER" ]; then
@@ -93,6 +96,8 @@ if [ ! -f "$INSTALL_MARKER" ]; then
   # Mark installation to skip reinstall on next boot
   touch "$INSTALL_MARKER"
 fi
+
+apply_env
 
 bin/console cache:clear
 
