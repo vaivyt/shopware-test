@@ -70,14 +70,19 @@ EOF
 apply_env
 
 needs_install() {
-  MYSQL_PWD="$DB_PASS" mysql \
+  local result
+  if ! result=$(MYSQL_PWD="$DB_PASS" mysql \
     --protocol=TCP \
     -h"$HOST" -P"$PORT" \
     -u"$DB_USER" \
     -D"$DB_NAME" \
-    -Nse "SELECT 1 FROM information_schema.tables WHERE table_schema='${DB_NAME}' AND table_name='sales_channel' LIMIT 1" >/dev/null 2>&1
+    -Nse "SELECT 1 FROM information_schema.tables WHERE table_schema='${DB_NAME}' AND table_name='sales_channel' LIMIT 1" 2>/dev/null); then
+    # Connection failure or query error: assume we need to (re)install
+    return 0
+  fi
 
-  if [ $? -ne 0 ]; then
+  if [ "$result" != "1" ]; then
+    # Table is missing
     return 0
   fi
 
