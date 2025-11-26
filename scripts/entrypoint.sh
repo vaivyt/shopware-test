@@ -37,7 +37,7 @@ if [ ! -f "$INSTALL_MARKER" ]; then
     --shop-name="${SHOP_NAME:-Demo Store}" \
     --shop-locale="${SHOP_LOCALE:-en-GB}" \
     --shop-currency="${SHOP_CURRENCY:-EUR}" \
-    --app-url="${APP_URL:-http://localhost:8500}" \
+    --shop-url="${APP_URL:-http://localhost:8500}" \
     --admin-email="${ADMIN_EMAIL:-admin@example.com}" \
     --admin-username="${ADMIN_USERNAME:-admin}" \
     --admin-password="${ADMIN_PASSWORD:-shopware}" \
