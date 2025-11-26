@@ -33,6 +33,10 @@ cd "$SHOPWARE_DIR"
 APP_URL_VALUE="${APP_URL:-http://localhost:8500}"
 DATABASE_URL_VALUE="mysql://${DATABASE_USER:-shopware}:${DATABASE_PASSWORD:-shopware}@${HOST}:${PORT}/${DATABASE_NAME:-shopware}"
 
+# Export for the current process so console commands and Apache share the same values
+export APP_URL="$APP_URL_VALUE"
+export DATABASE_URL="$DATABASE_URL_VALUE"
+
 # Write both .env.local (takes precedence) and .env to keep the runtime and CLI
 # aligned with the containerised database host instead of defaulting to localhost.
 cat > .env.local <<EOF
