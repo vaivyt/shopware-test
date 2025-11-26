@@ -16,13 +16,19 @@ This repository provides a lightweight infrastructure to spin up a default Shopw
    cp .env.example .env
    ```
 
-2. Start the stack (builds the PHP image, installs Shopware on first run, and loads demo data):
+2. Start the stack in the background (builds the PHP image, installs Shopware on first run, and loads demo data):
 
    ```bash
-   docker compose up --build
+   docker compose up -d --build
    ```
 
-3. Access the storefront and admin:
+   Wait until the `app` service reports "Server fully up and running" in the logs:
+
+   ```bash
+   docker compose logs -f app
+   ```
+
+3. Access the storefront and admin once the container is healthy:
 
    - Storefront: http://localhost:8000
    - Admin: http://localhost:8000/admin
