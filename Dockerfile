@@ -33,7 +33,7 @@ ENV APACHE_DOCUMENT_ROOT=/var/www/html/public
 RUN sed -ri 's#DocumentRoot /var/www/html#DocumentRoot ${APACHE_DOCUMENT_ROOT}#g' /etc/apache2/sites-available/000-default.conf \
     && sed -ri 's#<Directory /var/www/>#<Directory /var/www/html/>#g' /etc/apache2/apache2.conf
 
-EXPOSE 8000
+EXPOSE 80
 
 ENTRYPOINT ["entrypoint.sh"]
 CMD ["apache2-foreground"]

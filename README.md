@@ -30,8 +30,8 @@ This repository provides a lightweight infrastructure to spin up a default Shopw
 
 3. Access the storefront and admin once the container is healthy:
 
-   - Storefront: http://localhost:8000
-   - Admin: http://localhost:8000/admin
+   - Storefront: http://localhost:8500
+   - Admin: http://localhost:8500/admin
 
 4. Default admin credentials (override in `.env`):
 
@@ -71,4 +71,4 @@ Subsequent container restarts reuse the existing installation and database data.
 
 ## Notes
 - The install includes Shopware demo data so you get default store items out of the box.
-- The `APP_URL` in `.env` defaults to `http://localhost:8000`; change it if you bind to another host/port.
+- The `APP_URL` in `.env` defaults to `http://localhost:8500`; change it if you bind to another host/port.
