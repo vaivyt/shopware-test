@@ -16,6 +16,12 @@ This repository provides a lightweight infrastructure to spin up a default Shopw
    cp .env.example .env
    ```
 
+   Key defaults you can override in `.env`:
+
+   - `APP_URL` — public URL of the store (defaults to `http://localhost:8500`).
+   - `SHOP_NAME`, `SHOP_EMAIL`, `SHOP_LOCALE`, `SHOP_CURRENCY` — basic shop metadata.
+   - `ADMIN_USERNAME`, `ADMIN_PASSWORD`, `ADMIN_EMAIL` — admin account created after installation.
+
 2. Start the stack in the background (builds the PHP image, installs Shopware on first run, and loads demo data):
 
    ```bash
@@ -37,6 +43,7 @@ This repository provides a lightweight infrastructure to spin up a default Shopw
 
    - **User:** admin
    - **Password:** shopware
+   - **Email:** example@example.com
 
 ## Project layout
 
@@ -50,8 +57,9 @@ This repository provides a lightweight infrastructure to spin up a default Shopw
 On the first container start, the entrypoint will:
 1. Download the Shopware production template via Composer if the `shopware/public/index.php` file is missing.
 2. Wait for MySQL to become reachable.
-3. Run `bin/console system:install` with demo data and the admin credentials from `.env`.
-4. Clear the cache and start Apache.
+3. Run `bin/console system:install` with demo data, shop metadata (name, email, locale, currency) from `.env`, and the APP_URL exported before installation.
+4. Create an admin user with the credentials from `.env` (ignores the create step if the user already exists).
+5. Clear the cache and start Apache.
 
 Subsequent container restarts reuse the existing installation and database data.
 

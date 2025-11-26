@@ -36,14 +36,21 @@ if [ ! -f "$INSTALL_MARKER" ]; then
     --drop-database \
     --basic-setup \
     --shop-name="${SHOP_NAME:-Demo Store}" \
+    --shop-email="${SHOP_EMAIL:-example@example.com}" \
     --shop-locale="${SHOP_LOCALE:-en-GB}" \
     --shop-currency="${SHOP_CURRENCY:-EUR}" \
-    --admin-email="${ADMIN_EMAIL:-admin@example.com}" \
-    --admin-username="${ADMIN_USERNAME:-admin}" \
-    --admin-password="${ADMIN_PASSWORD:-shopware}" \
-    --admin-first-name="${ADMIN_FIRSTNAME:-Demo}" \
-    --admin-last-name="${ADMIN_LASTNAME:-Admin}" \
-    --demo-data
+    --skip-first-run-wizard
+
+  # Ensure an admin account exists (ignored if already created)
+  set +e
+  bin/console user:create "${ADMIN_USERNAME:-admin}" --admin \
+    --email="${ADMIN_EMAIL:-example@example.com}" \
+    --password="${ADMIN_PASSWORD:-shopware}" \
+    --firstName="${ADMIN_FIRSTNAME:-Demo}" \
+    --lastName="${ADMIN_LASTNAME:-Admin}" \
+    --locale="${ADMIN_LOCALE:-en-GB}" \
+    --no-interaction
+  set -e
 
   # Mark installation to skip reinstall on next boot
   touch "$INSTALL_MARKER"
