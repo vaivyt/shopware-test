@@ -65,7 +65,7 @@ Subsequent container restarts reuse the existing installation and database data.
 - Reinstall the shop (destroys data):
   ```bash
   docker compose down -v
-  rm -rf shopware/*
+  rm -rf shopware/* shopware/.[!.]* shopware/..?*
   docker compose up --build
   ```
 

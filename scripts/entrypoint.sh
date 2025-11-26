@@ -6,8 +6,11 @@ INSTALL_MARKER="$SHOPWARE_DIR/.installed"
 
 if [ ! -f "$SHOPWARE_DIR/public/index.php" ]; then
   echo "[entrypoint] Installing Shopware source..."
-  rm -rf "$SHOPWARE_DIR"/*
+  shopt -s dotglob
+  rm -rf "${SHOPWARE_DIR:?}"/*
+  shopt -u dotglob
   composer create-project shopware/production "$SHOPWARE_DIR" --no-interaction
+  touch "$SHOPWARE_DIR/.gitkeep"
 fi
 
 # Ensure permissions for web user
