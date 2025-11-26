@@ -22,6 +22,9 @@ chown -R www-data:www-data "$SHOPWARE_DIR"
 # Wait for database
 HOST=${DATABASE_HOST:-db}
 PORT=${DATABASE_PORT:-3306}
+DB_USER=${DATABASE_USER:-shopware}
+DB_PASS=${DATABASE_PASSWORD:-shopware}
+DB_NAME=${DATABASE_NAME:-shopware}
 until mysqladmin ping -h"$HOST" -P"$PORT" --silent; do
   echo "[entrypoint] Waiting for database at $HOST:$PORT..."
   sleep 2
@@ -30,7 +33,7 @@ done
 cd "$SHOPWARE_DIR"
 
 APP_URL_VALUE="${APP_URL:-http://localhost:8500}"
-DATABASE_URL_VALUE="mysql://${DATABASE_USER:-shopware}:${DATABASE_PASSWORD:-shopware}@${HOST}:${PORT}/${DATABASE_NAME:-shopware}"
+DATABASE_URL_VALUE="mysql://${DB_USER}:${DB_PASS}@${HOST}:${PORT}/${DB_NAME}"
 
 apply_env() {
   # Export for the current process so console commands and Apache share the same values
@@ -66,8 +69,22 @@ EOF
 
 apply_env
 
-# If not installed, run installer with demo data
-if [ ! -f "$INSTALL_MARKER" ]; then
+needs_install() {
+  MYSQL_PWD="$DB_PASS" mysql \
+    --protocol=TCP \
+    -h"$HOST" -P"$PORT" \
+    -u"$DB_USER" \
+    -D"$DB_NAME" \
+    -Nse "SELECT 1 FROM information_schema.tables WHERE table_schema='${DB_NAME}' AND table_name='sales_channel' LIMIT 1" >/dev/null 2>&1
+
+  if [ $? -ne 0 ]; then
+    return 0
+  fi
+
+  return 1
+}
+
+if needs_install; then
   echo "[entrypoint] Running Shopware installer..."
   export APP_URL="$APP_URL_VALUE"
   export DATABASE_URL="$DATABASE_URL_VALUE"
@@ -95,6 +112,8 @@ if [ ! -f "$INSTALL_MARKER" ]; then
 
   # Mark installation to skip reinstall on next boot
   touch "$INSTALL_MARKER"
+else
+  echo "[entrypoint] Shopware database already present; skipping install"
 fi
 
 apply_env

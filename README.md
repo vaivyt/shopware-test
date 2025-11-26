@@ -58,7 +58,7 @@ This repository provides a lightweight infrastructure to spin up a default Shopw
 On the first container start, the entrypoint will:
 1. Download the Shopware production template via Composer if the `shopware/public/index.php` file is missing.
 2. Wait for MySQL to become reachable.
-3. Run `bin/console system:install` with demo data, shop metadata (name, email, locale, currency) from `.env`, and the APP_URL exported before installation.
+3. Run `bin/console system:install` with demo data, shop metadata (name, email, locale, currency) from `.env`, and the APP_URL exported before installation. On restart, the entrypoint checks for the `sales_channel` table; if it's missing, the installer is re-run automatically to repair the database.
 4. Create an admin user with the credentials from `.env` (ignores the create step if the user already exists).
 5. Clear the cache and start Apache.
 
