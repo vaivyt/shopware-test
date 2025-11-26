@@ -60,6 +60,9 @@ DATABASE_URL=${DATABASE_URL_VALUE}
 EOF
 fi
 
+# Drop any cached env dump so the runtime picks up the updated connection settings
+rm -f .env.local.php
+
 # If not installed, run installer with demo data
 if [ ! -f "$INSTALL_MARKER" ]; then
   echo "[entrypoint] Running Shopware installer..."
