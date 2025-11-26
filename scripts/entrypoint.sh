@@ -29,6 +29,7 @@ cd "$SHOPWARE_DIR"
 # If not installed, run installer with demo data
 if [ ! -f "$INSTALL_MARKER" ]; then
   echo "[entrypoint] Running Shopware installer..."
+  export APP_URL="${APP_URL:-http://localhost:8500}"
   bin/console system:install \
     --create-database \
     --force \
@@ -37,7 +38,6 @@ if [ ! -f "$INSTALL_MARKER" ]; then
     --shop-name="${SHOP_NAME:-Demo Store}" \
     --shop-locale="${SHOP_LOCALE:-en-GB}" \
     --shop-currency="${SHOP_CURRENCY:-EUR}" \
-    --shop-url="${APP_URL:-http://localhost:8500}" \
     --admin-email="${ADMIN_EMAIL:-admin@example.com}" \
     --admin-username="${ADMIN_USERNAME:-admin}" \
     --admin-password="${ADMIN_PASSWORD:-shopware}" \
