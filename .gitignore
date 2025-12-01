@@ -1,0 +1,16 @@
+/vendor
+/.env
+/.idea
+/node_modules
+/docker-cache
+/shopware/.env
+/shopware/.env.local
+/shopware/vendor
+/shopware/var
+/shopware/public/bundles
+/shopware/public/media
+/shopware/public/thumbnail
+/shopware/public/theme
+/shopware/public/sitemap
+/shopware/public/build
+/shopware/node_modules
